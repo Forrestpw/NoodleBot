@@ -6,7 +6,7 @@ import os
 reddit = praw.Reddit('bot1')
 
 # list of subreddits the bot will check
-subreddit_list = ['pythonforengineers', 'test']
+subreddit_list = ['foodporn', 'food']
 # word in title bot will look for
 titles_to_search = ['noodles', 'ramen', 'spaghetti', 'pho', 'orzo', 'ravioli', 'linguine', 'macaroni', 'fettuccine',
                     'penne', 'ziti', 'lasagne']
