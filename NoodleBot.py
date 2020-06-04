@@ -9,8 +9,8 @@ reddit = praw.Reddit('bot1')
 # list of subreddits the bot will check
 subreddit_list = ['foodporn', 'food']
 # word in title bot will look for
-titles_to_search = ['noodle', 'ramen', 'spaghetti', 'orzo', 'ravioli', 'linguine', 'macaroni', 'fettuccine',
-                    'penne', 'ziti', 'lasagne', "mac and cheese", 'rigatoni']
+titles_to_search = ['noodle', 'ramen', 'spaghetti', 'orzo', 'ravioli', 'linguine', 'macaroni',
+                    'fettuccine', 'penne', 'ziti', 'lasagne', "mac and cheese", 'rigatoni']
 # bots catchphrases he will respond with
 catchphrases = ["Oh yeah, its noodle time!",
                 "Now that's thinking with your noodle.",
@@ -19,6 +19,8 @@ catchphrases = ["Oh yeah, its noodle time!",
                 "Yet...",
                 "Oh a bot could get used to this.",
                 "The only reason us bots would ever conquer this world would be for noodles.",
+                "The fact bots cannot eat is just wrong, humans should have designed us better.",
+                "ahhh another for my noodle collection, thank you human."
                 "The fact bots cannot eat is just wrong! humans should have designed us better.",
                 "ahhh another for my noodle collection, thank you human.",
                 "Noodle bot has arrived to the scene... And it looks delicious!"]
@@ -37,66 +39,66 @@ multiple_replies = ["Ok look human im just here for the noodles and nothing else
                     "so now you're just stuck with this and not a real response."]
 
 
-def saved_info(txt_file):
-    if not os.path.isfile(txt_file):
-        replied_to = []
-        return replied_to
-
+def post_search():
+    if not os.path.isfile("posts_replied_to.txt"):
+        posts_replied_to = []
     else:
-        with open(txt_file) as f:
-            replied_to = f.read()
-            replied_to = replied_to.split("\n")
-            replied_to = list(filter(None, replied_to))
-            return replied_to
+        with open("posts_replied_to.txt") as f:
+            posts_replied_to = f.read()
+            posts_replied_to = posts_replied_to.split("\n")
+            posts_replied_to = list(filter(None, posts_replied_to))
 
-
-def write_to_files(txt_file):
-    with open(txt_file, "w") as f:
-        for post_id in saved_info(txt_file):
-            f.write(post_id + "\n")
-
-
-def check_for_posts(txt_file):
     for i in range(len(subreddit_list)):
 
         subreddit = reddit.subreddit(subreddit_list[i])
 
         for submission in subreddit.new(limit=10):
-            if submission.id not in saved_info(txt_file):
+            if submission.id not in posts_replied_to:
                 for j in range(len(titles_to_search)):
                     if re.search(titles_to_search[j], submission.title, re.IGNORECASE):
+                        submission.reply(catchphrases[random.randint(0, 7)])
                         submission.reply(catchphrases[random.randint(0, 8)])
                         print("Noodle Bot replying to: ", submission.title)
-                        saved_info(txt_file).append(submission.id)
+                        posts_replied_to.append(submission.id)
+
+    with open("posts_replied_to.txt", "w") as f:
+        for post_id in posts_replied_to:
+            f.write(post_id + "\n")
 
 
-def comment_reply(txt_file):
+def comment_reply():
+    if not os.path.isfile("authors_replied_to.txt"):
+        authors_replied_to = []
+
+    else:
+        with open("authors_replied_to.txt") as f:
+            authors_replied_to = f.read()
+            authors_replied_to = authors_replied_to.split("\n")
+            authors_replied_to = list(filter(None, authors_replied_to))
+
     for mail in reddit.inbox.unread():
         if isinstance(mail, Comment):
-            if str(mail.author) not in saved_info(txt_file):
-                mail.reply("Dear friend I am just a bot and not a smart one either so I have no words for your "
-                           "message. If you truly must speak to me try messaging /u/foorast he's my creator and the "
-                           "reason I crave noodles so much.")
+            if str(mail.author) not in authors_replied_to:
+                mail.reply(
+                    "Dear friend I am just a bot and not a smart one either so I have no words for your message. "
+                    "If you truly must speak to me try messaging /u/foorast he's my creator and the reason I crave "
+                    "noodles so much.")
                 print("I have responded to:", mail.author)
-                saved_info(txt_file).append(str(mail.author))
+                authors_replied_to.append(str(mail.author))
                 mail.mark_read()
             else:
                 mail.reply(multiple_replies[random.randint(0, 7)])
                 print("I have responded again to:", mail.author)
                 mail.mark_read()
 
+    with open("authors_replied_to.txt", "w") as f:
+        for authors_id in authors_replied_to:
+            f.write(authors_id + "\n")
+
 
 def main():
-    posts_replied_to = "posts_replied_to.txt"
-    authors_replied_to = "authors_replied_to.txt"
-
-    saved_info(posts_replied_to)
-    check_for_posts(posts_replied_to)
-    write_to_files(posts_replied_to)
-
-    saved_info(authors_replied_to)
-    comment_reply(authors_replied_to)
-    write_to_files(authors_replied_to)
+    post_search()
+    comment_reply()
 
 
 main()
