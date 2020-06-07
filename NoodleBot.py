@@ -43,7 +43,8 @@ def post_search():
                 for j in range(len(titles_to_search)):  # loop through our keywords to search for posts
                     if re.search(titles_to_search[j], submission.title, re.IGNORECASE):  # if posts title has keyword
                         submission.reply(bot_responses("catchphrases.txt"))  # reply to the post with a catchphrase
-                        print("Noodle Bot replying to: ", submission.title)  # print to console what was done
+                        print("Noodle Bot replying to:", submission.title, ", in subreddit", subreddit)  # print to
+                        # console what was done
                         posts_replied_to.append(submission.id)  # add post id to our array
 
     with open("posts_replied_to.txt", "w") as f:  # open text file posts_replied_to.txt
@@ -52,7 +53,7 @@ def post_search():
 
 
 # function that checks inbox and responds to new comment replies and responds based on if the given author has
-# replied to us before
+# replied to noodlebot before
 def comment_reply():
 
     # if text file doesnt exist create array
