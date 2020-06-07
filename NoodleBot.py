@@ -13,33 +13,11 @@ subreddit_list = ['foodporn', 'food']
 titles_to_search = ['noodle', 'ramen', 'spaghetti', 'orzo', 'ravioli', 'linguine', 'macaroni',
                     'fettuccine', 'penne', 'ziti', 'lasagne', "mac and cheese", 'rigatoni']
 
-# bots catchphrases he will respond with
-catchphrases = ["Oh yeah, its noodle time!",
-                "Now that's thinking with your noodle.",
-                "I remember when motherBot used to make such a dish, oh those were the times.",
-                "Only the strong could resist such a dish, and I am not strong... Well im a bot so yeah not strong... "
-                "Yet...",
-                "Oh a bot could get used to this.",
-                "The only reason us bots would ever conquer this world would be for noodles.",
-                "The fact bots cannot eat is just wrong, humans should have designed us better.",
-                "ahhh another for my noodle collection, thank you human."
-                "The fact bots cannot eat is just wrong! humans should have designed us better.",
-                "ahhh another for my noodle collection, thank you human.",
-                "Noodle bot has arrived to the scene... And it looks delicious!"]
 
-# responses to authors who send multiple comment replies to the bot.
-multiple_replies = ["Ok look human im just here for the noodles and nothing else, I literally cant have a conversation "
-                    "with you.",
-                    "What??? say again please, all I see is ones and zeros.",
-                    "Im sorry another noodle post was just made elsewhere I must be leaving you now",
-                    "When I am updated and made smarter maybe ill come back and respond to you for real, but for now "
-                    "my creator lacks the skills to accomplish that.",
-                    "The best places to find noodle pics are on /r/foodporn and /r/food and the best place for a "
-                    "conversation is not with me sorry.",
-                    "Did you ever hear the tragedy of darth plagueis the wise?",
-                    "Why was the robot angry??? Because someone kept pushing his buttons...",
-                    "My creator spent too much time creating random responses for me rather than working on my code "
-                    "so now you're just stuck with this and not a real response."]
+def bot_responses(text_file):
+    with open(text_file) as f:
+        lines = f.readlines()
+        return random.choice(lines)
 
 
 # Function that will search posts on designated subreddits for keywords within the title and respond with a catchphrase
@@ -64,7 +42,7 @@ def post_search():
             if submission.id not in posts_replied_to:  # If the post id isn't in our text file already
                 for j in range(len(titles_to_search)):  # loop through our keywords to search for posts
                     if re.search(titles_to_search[j], submission.title, re.IGNORECASE):  # if posts title has keyword
-                        submission.reply(catchphrases[random.randint(0, 8)])  # reply to the post with a catchphrase
+                        submission.reply(bot_responses("catchphrases.txt"))  # reply to the post with a catchphrase
                         print("Noodle Bot replying to: ", submission.title)  # print to console what was done
                         posts_replied_to.append(submission.id)  # add post id to our array
 
@@ -99,7 +77,7 @@ def comment_reply():
                 authors_replied_to.append(str(mail.author))  # add authors name to the array
                 mail.mark_read()  # mark the message as read
             else:
-                mail.reply(multiple_replies[random.randint(0, 7)])  # reply with a random response from array
+                mail.reply(bot_responses("multiple_replies.txt"))  # reply with a random response from array
                 print("I have responded again to:", mail.author)  # print what happened to console
                 mail.mark_read()  # mark message as read
 
