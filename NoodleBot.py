@@ -5,15 +5,18 @@ from praw.models import Comment
 
 reddit = praw.Reddit('bot1')
 
-# word in title bot will look for
+# List of words NoodleBot will look for
 KEYWORDS_IN_TITLE = ['noodle', 'ramen', 'spaghetti', 'orzo', 'ravioli', 'linguine', 'macaroni',
                      'fettuccine', 'penne', 'ziti', 'lasagna', "mac and cheese", 'rigatoni', 'pasta']
 
+# List to store post id's
 POSTS_ALREADY_RESPONDED_TO = []
 
+# List to store author names
 AUTHORS_RESPONDED_TO = []
 
 
+# Function that reads lines from a text file and returns a random line's string
 def bot_responses(text_file):
     with open(text_file) as f:
         lines = f.readlines()
@@ -36,7 +39,7 @@ def post_search():
 
 
 # function that checks inbox and responds to new comment replies and responds based on if the given author has
-# replied to noodlebot before
+# replied to NoodleBot before.
 def comment_reply():
     for mail in reddit.inbox.unread():  # loop through unread mail
         if isinstance(mail, Comment):  # if unread mail is a comment
