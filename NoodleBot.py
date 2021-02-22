@@ -27,7 +27,9 @@ def post_search():
 
     for submission in subreddit.new(limit=10):  # Loop through the 10 newest posts in given subreddit
         for j in KEYWORDS_IN_TITLE:  # loop through keywords to search for posts
-            if re.search(j, submission.title, re.IGNORECASE) and submission.id not in POSTS_ALREADY_RESPONDED_TO:
+            if submission.id in POSTS_ALREADY_RESPONDED_TO:
+                break
+            if re.search(j, submission.title, re.IGNORECASE):
                 submission.reply(bot_responses("catchphrases.txt"))  # reply to the post with a catchphrase
                 print("Noodle Bot replying to:", submission.title, ", in subreddit", subreddit)  # print to console
                 POSTS_ALREADY_RESPONDED_TO.append(submission.id)  # add post id to list
