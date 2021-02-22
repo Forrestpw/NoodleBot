@@ -23,9 +23,9 @@ def bot_responses(text_file):
         return random.choice(lines)
 
 
-# Function that will search posts on subreddit foodporn for keywords within the title and respond with a catchphrase
-def post_search():
-    subreddit = reddit.subreddit("foodporn")  # store the subreddit to a variable
+# Function that will search posts on a given subreddit for keywords within the title and respond with a catchphrase
+def post_search(subreddit_name):
+    subreddit = reddit.subreddit(subreddit_name)  # store the subreddit to a variable
 
     for submission in subreddit.new(limit=10):  # Loop through the 10 newest posts in given subreddit
         for j in KEYWORDS_IN_TITLE:  # loop through keywords to search for posts
@@ -58,5 +58,5 @@ def comment_reply():
 
 
 if __name__ == "__main__":
-    post_search()
+    post_search("foodporn")
     comment_reply()
