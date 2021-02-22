@@ -1,7 +1,6 @@
 import praw
 import random
 import re
-import os
 from praw.models import Comment
 
 reddit = praw.Reddit('bot1')
