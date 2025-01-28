@@ -46,7 +46,7 @@ def comment_reply():
             if str(mail.author) not in AUTHORS_RESPONDED_TO:
                 mail.reply(
                     "Dear friend I am just a bot and not a smart one either so I have no words for your message. "
-                    "If you truly must speak to me try messaging /u/foorast he's my creator and the reason I crave "
+                    "If you truly must speak to me try messaging /u/foorast she's my creator and the reason I crave "
                     "noodles so much.")
                 print("I have responded to:", mail.author)
                 AUTHORS_RESPONDED_TO.append(str(mail.author))
